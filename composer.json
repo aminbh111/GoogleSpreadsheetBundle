@@ -1,5 +1,5 @@
 {
-  "name": "Noxs/google-spreadsheet-bundle",
+  "name": "noxs/google-spreadsheet-bundle",
   "description": "Dreamlex Google spreadsheet bundle",
   "type": "symfony-bundle",
   "license": "MIT",
