@@ -117,7 +117,8 @@ class GoogleSpreadsheet {
      */
     public function clear($spreadsheetId, $range = null) {
         $service = new \Google_Service_Sheets($this->getAuthorizedClient());
-        $response = $service->spreadsheets_values->clear($spreadsheetId, $range);
+        $requestBody = new \Google_Service_Sheets_ClearValuesRequest();
+        $response = $service->spreadsheets_values->clear($spreadsheetId, $range, $requestBody);
         return $response->getClearedRange();
     }
 
