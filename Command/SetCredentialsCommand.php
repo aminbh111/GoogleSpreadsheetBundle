@@ -1,4 +1,5 @@
 <?php
+
 namespace Dreamlex\Bundle\GoogleSpreadsheetBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -12,17 +13,15 @@ use Symfony\Component\Console\Question\Question;
  *
  * @package Dreamlex\Bundle\GoogleSpreadsheetBundle\Command
  */
-class SetCredentialsCommand extends ContainerAwareCommand
-{
-    protected function configure()
-    {
+class SetCredentialsCommand extends ContainerAwareCommand {
+
+    protected function configure() {
         $this
-            ->setName('google-spreadsheet:set-credentials')
-            ->setDescription('Set credentials for google spreadsheet');
+                ->setName('google-spreadsheet:set-credentials')
+                ->setDescription('Set credentials for google spreadsheet');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
+    protected function execute(InputInterface $input, OutputInterface $output) {
         $googleSpreadsheet = $this->getContainer()->get('dreamlex_google_spreadsheet');
 
         if (false === $googleSpreadsheet->isCredentialsExisted()) {
@@ -47,4 +46,5 @@ class SetCredentialsCommand extends ContainerAwareCommand
             $output->writeln(sprintf('<info>Credentials already existed in %s</info>', $googleSpreadsheet->getCredentialsFilename()));
         }
     }
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Dreamlex\Bundle\GoogleSpreadsheetBundle\Spreadsheet;
 
 use Symfony\Component\Filesystem\Filesystem;
@@ -8,8 +9,8 @@ use Symfony\Component\Filesystem\Filesystem;
  *
  * @package Dreamlex\Bundle\GoogleSpreadsheetBundle\Spreadsheet
  */
-class GoogleSpreadsheet
-{
+class GoogleSpreadsheet {
+
     /**
      * @var string
      */
@@ -29,9 +30,9 @@ class GoogleSpreadsheet
      * @var \Google_Client
      */
     protected $client;
-
     protected $scopes = [
         'readonly' => 'https://www.googleapis.com/auth/spreadsheets.readonly',
+        'readwrite' => "https://www.googleapis.com/auth/spreadsheets"
     ];
 
     /**
@@ -56,19 +57,18 @@ class GoogleSpreadsheet
      * @throws \Google_Exception
      * @throws \Symfony\Component\Filesystem\Exception\IOException
      */
-    public function __construct($kernelRootDir, $appName, $scope = 'readonly', $authConfigPath = null)
-    {
+    public function __construct($kernelRootDir, $appName, $scope = 'readonly', $authConfigPath = null) {
         if (false === array_key_exists($scope, $this->scopes)) {
             throw new \InvalidArgumentException('Unknown scope');
         }
 
         $this->appName = $appName;
         $this->kernelRootDir = $kernelRootDir;
-        $this->credentialsFilename = $kernelRootDir.'/config/credentials/'.$this->appName.'.json';
+        $this->credentialsFilename = $kernelRootDir . '/config/credentials/' . $this->appName . '.json';
         $this->scope = $scope;
 
         if ($authConfigPath === null) {
-            $authConfigPath = $this->kernelRootDir.'/config/client_secret.json';
+            $authConfigPath = $this->kernelRootDir . '/config/client_secret.json';
         }
 
         $this->fs = new Filesystem();
@@ -87,27 +87,51 @@ class GoogleSpreadsheet
      *
      * @return mixed
      */
-    public function getTable($spreadsheetId, $range = null)
-    {
+    public function get($spreadsheetId, $range = null) {
         $service = new \Google_Service_Sheets($this->getAuthorizedClient());
         $response = $service->spreadsheets_values->get($spreadsheetId, $range);
-
         return $response->getValues();
+    }
+
+    /**
+     * @param string $spreadsheetId Such as 13O_57K1FCSYVnI0oMESfqLx7_yPP3vNVuSjPuc75Fus
+     * @param string $range         Range
+     *
+     * @return mixed
+     */
+    public function append($spreadsheetId, $range = null, $values = null) {
+        $service = new \Google_Service_Sheets($this->getAuthorizedClient());
+        $optParams['insertDataOption'] = 'INSERT_ROWS';
+        $optParams['valueInputOption'] = 'RAW';
+        $requestBody = new \Google_Service_Sheets_ValueRange();
+        $requestBody->setValues(array("values" => $values));
+        $response = $service->spreadsheets_values->append($spreadsheetId, $range, $requestBody, $optParams);
+        return $response->getValues();
+    }
+
+    /**
+     * @param string $spreadsheetId Such as 13O_57K1FCSYVnI0oMESfqLx7_yPP3vNVuSjPuc75Fus
+     * @param string $range         Range
+     *
+     * @return mixed
+     */
+    public function clear($spreadsheetId, $range = null) {
+        $service = new \Google_Service_Sheets($this->getAuthorizedClient());
+        $response = $service->spreadsheets_values->clear($spreadsheetId, $range);
+        return $response->getClearedRange();
     }
 
     /**
      * @return \Google_Client the authorized client object
      */
-    public function getClient()
-    {
+    public function getClient() {
         return $this->client;
     }
 
     /**
      * @return string
      */
-    public function getCredentialsFilename(): string
-    {
+    public function getCredentialsFilename(): string {
         return $this->credentialsFilename;
     }
 
@@ -118,8 +142,7 @@ class GoogleSpreadsheet
      *
      * @throws \Symfony\Component\Filesystem\Exception\IOException
      */
-    public function saveCredentials(array $accessToken)
-    {
+    public function saveCredentials(array $accessToken) {
         $this->fs = new Filesystem();
 
         $this->fs->dumpFile($this->credentialsFilename, json_encode($accessToken));
@@ -130,8 +153,7 @@ class GoogleSpreadsheet
     /**
      * @return bool
      */
-    public function isCredentialsExisted()
-    {
+    public function isCredentialsExisted() {
         $this->fs = new Filesystem();
 
         return $this->fs->exists($this->credentialsFilename);
@@ -140,8 +162,7 @@ class GoogleSpreadsheet
     /**
      * @throws \Symfony\Component\Filesystem\Exception\IOException
      */
-    public function removeCredentials()
-    {
+    public function removeCredentials() {
         $this->fs = new Filesystem();
 
         $this->fs->remove($this->credentialsFilename);
@@ -152,8 +173,7 @@ class GoogleSpreadsheet
      *
      * @throws \Symfony\Component\Filesystem\Exception\IOException
      */
-    protected function refreshToken()
-    {
+    protected function refreshToken() {
         if ($this->client->isAccessTokenExpired()) {
             $this->client->fetchAccessTokenWithRefreshToken($this->client->getRefreshToken());
             $this->fs->dumpFile($this->credentialsFilename, json_encode($this->client->getAccessToken()));
@@ -163,8 +183,7 @@ class GoogleSpreadsheet
     /**
      * @return \Google_Client
      */
-    protected function getAuthorizedClient()
-    {
+    protected function getAuthorizedClient() {
         if (false === $this->isAuthorized) {
             if (false === $this->isCredentialsExisted()) {
                 throw new \BadMethodCallException('No credentials found');
@@ -175,7 +194,7 @@ class GoogleSpreadsheet
             $this->refreshToken();
             $this->isAuthorized = true;
         }
-
         return $this->client;
     }
+
 }

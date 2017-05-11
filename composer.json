@@ -1,47 +1,47 @@
 {
-  "name": "noxs/google-spreadsheet-bundle",
-  "description": "Dreamlex Google spreadsheet bundle",
-  "type": "symfony-bundle",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Oleksii Polivaniy",
-      "email": "alexndlm@gmail.com",
-      "role": "Developer"
+    "name": "noxs/google-spreadsheet-bundle",
+    "description": "Dreamlex Google spreadsheet bundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Oleksii Polivaniy",
+            "email": "alexndlm@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "ellementA",
+            "email": "ellementacc@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Ivan Borysenko",
+            "email": "ivan.binzz.borysenko@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "keywords": [
+        "google",
+        "spreadsheet",
+        "google sheet"
+    ],
+    "require": {
+        "php": ">=5.3.9",
+        "symfony/symfony": "3.1.*",
+        "google/apiclient": "2.1.*",
+        "ocramius/proxy-manager": "^2.0"
     },
-    {
-      "name": "ellementA",
-      "email": "ellementacc@gmail.com",
-      "role": "Developer"
+    "require-dev": {
+        "phpunit/phpunit": "5.4.*"
     },
-    {
-      "name": "Ivan Borysenko",
-      "email": "ivan.binzz.borysenko@gmail.com",
-      "role": "Developer"
+    "autoload": {
+        "psr-4": {
+            "Dreamlex\\Bundle\\GoogleSpreadsheetBundle\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
     }
-  ],
-  "keywords": [
-    "google",
-    "spreadsheet",
-    "google sheet"
-  ],
-  "require": {
-    "php": ">=5.3.9",
-    "symfony/symfony": "3.1.*",
-    "google/apiclient": "~2.0",
-    "ocramius/proxy-manager": "^2.0"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "5.4.*"
-  },
-  "autoload": {
-    "psr-4": {
-      "Dreamlex\\Bundle\\GoogleSpreadsheetBundle\\": ""
-    }
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "1.x-dev"
-    }
-  }
 }
