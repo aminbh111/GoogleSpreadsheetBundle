@@ -106,7 +106,7 @@ class GoogleSpreadsheet {
         $requestBody = new \Google_Service_Sheets_ValueRange();
         $requestBody->setValues(array("values" => $values));
         $response = $service->spreadsheets_values->append($spreadsheetId, $range, $requestBody, $optParams);
-        return $response->getValues();
+        return $response->getUpdates();
     }
 
     /**
