@@ -115,6 +115,21 @@ class GoogleSpreadsheet {
      *
      * @return mixed
      */
+    public function update($spreadsheetId, $range = null, $values = null) {
+        $service = new \Google_Service_Sheets($this->getAuthorizedClient());
+        $optParams['valueInputOption'] = 'RAW';
+        $requestBody = new \Google_Service_Sheets_ValueRange();
+        $requestBody->setValues(array("values" => $values));
+        $response = $service->spreadsheets_values->update($spreadsheetId, $range, $requestBody, $optParams);
+        return $response->getUpdatedCells();
+    }
+
+    /**
+     * @param string $spreadsheetId Such as 13O_57K1FCSYVnI0oMESfqLx7_yPP3vNVuSjPuc75Fus
+     * @param string $range         Range
+     *
+     * @return mixed
+     */
     public function clear($spreadsheetId, $range = null) {
         $service = new \Google_Service_Sheets($this->getAuthorizedClient());
         $requestBody = new \Google_Service_Sheets_ClearValuesRequest();
