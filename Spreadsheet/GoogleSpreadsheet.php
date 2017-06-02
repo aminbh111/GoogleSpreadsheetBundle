@@ -44,6 +44,11 @@ class GoogleSpreadsheet {
      * @var boolean
      */
     protected $isAuthorized;
+    
+    /**
+     * @var array
+     */
+    protected $batchRequests;
 
     /**
      * GoogleSpreadsheet constructor.
@@ -124,6 +129,39 @@ class GoogleSpreadsheet {
         return $response->getUpdatedCells();
     }
 
+/**
+     *   
+     */
+    public function clearBatchRequests() {
+        $this->batchRequests = array();
+    }
+
+    /**
+     *
+     */
+    public function addBatchRequest($range = null, $values = null) {
+        $requestBody = new \Google_Service_Sheets_ValueRange();
+        $requestBody->setValues(array("values" => $values));
+        $requestBody->setRange($range);
+        $this->batchRequests[] = $requestBody;
+    }
+
+    /**
+     * @param string $spreadsheetId Such as 13O_57K1FCSYVnI0oMESfqLx7_yPP3vNVuSjPuc75Fus
+     * @param string $range         Range
+     *
+     * @return mixed
+     */
+    public function batchUpdate($spreadsheetId) {
+        $service = new \Google_Service_Sheets($this->getAuthorizedClient());
+        $requestBody = new \Google_Service_Sheets_BatchUpdateValuesRequest();
+        $requestBody->setData($this->batchRequests);
+        $requestBody['valueInputOption'] = 'RAW';
+        $response = $service->spreadsheets_values->batchUpdate($spreadsheetId, $requestBody);
+        $this->batchRequests = array();
+        return $response->getTotalUpdatedCells();
+    }
+    
     /**
      * @param string $spreadsheetId Such as 13O_57K1FCSYVnI0oMESfqLx7_yPP3vNVuSjPuc75Fus
      * @param string $range         Range
