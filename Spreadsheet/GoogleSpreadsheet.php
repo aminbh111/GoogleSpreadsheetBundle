@@ -190,7 +190,7 @@ class GoogleSpreadsheet {
         $optParams['ranges'] = $ranges;  // TODO: Update placeholder value.
 
         $response = $service->spreadsheets_values->batchGet($spreadsheetId, $optParams);
-        return $response->getValues();
+        return $response->getValueRanges();
     }
 
     /**
