@@ -175,7 +175,20 @@ class GoogleSpreadsheet {
         $this->batchRequests = array();
         return $response->getTotalUpdatedCells();
     }
-    
+
+
+    /**
+     * @param string $spreadsheetId Such as 13O_57K1FCSYVnI0oMESfqLx7_yPP3vNVuSjPuc75Fus
+     * @param string $ranges         Array
+     *
+     * @return mixed
+     */
+    public function batchGet($spreadsheetId,$ranges) {
+        $service = new \Google_Service_Sheets($this->getAuthorizedClient());
+        $response = $service->spreadsheets_values->batchGet($spreadsheetId, $ranges);
+        return $response->getValues();
+    }
+
     /**
      * @param string $spreadsheetId Such as 13O_57K1FCSYVnI0oMESfqLx7_yPP3vNVuSjPuc75Fus
      * @param string $range         Range
