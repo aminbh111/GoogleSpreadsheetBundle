@@ -185,7 +185,11 @@ class GoogleSpreadsheet {
      */
     public function batchGet($spreadsheetId,$ranges) {
         $service = new \Google_Service_Sheets($this->getAuthorizedClient());
-        $response = $service->spreadsheets_values->batchGet($spreadsheetId, $ranges);
+        $optParams = [];
+
+        $optParams['ranges'] = $ranges;  // TODO: Update placeholder value.
+
+        $response = $service->spreadsheets_values->batchGet($spreadsheetId, $optParams);
         return $response->getValues();
     }
 
