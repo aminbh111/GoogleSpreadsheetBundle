@@ -97,6 +97,20 @@ class GoogleSpreadsheet {
         $response = $service->spreadsheets_values->get($spreadsheetId, $range);
         return $response->getValues();
     }
+    /**
+     * @param string $spreadsheetId Such as 13O_57K1FCSYVnI0oMESfqLx7_yPP3vNVuSjPuc75Fus
+     * @param string $range         Range
+     *
+     * @return mixed
+     */
+    public function getcolumn($spreadsheetId, $range = null) {
+        $opts_params = array(
+            'majorDimension' => 'COLUMNS'
+        );
+        $service = new \Google_Service_Sheets($this->getAuthorizedClient());
+        $response = $service->spreadsheets_values->get($spreadsheetId, $range,$opts_params);
+        return $response->getValues();
+    }
 
     /**
      * @param string $spreadsheetId Such as 13O_57K1FCSYVnI0oMESfqLx7_yPP3vNVuSjPuc75Fus
