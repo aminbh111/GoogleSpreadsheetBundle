@@ -216,7 +216,7 @@ class GoogleSpreadsheet {
     /**
      * @return string
      */
-    public function getCredentialsFilename(): string {
+    public function getCredentialsFilename() {
         return $this->credentialsFilename;
     }
 
